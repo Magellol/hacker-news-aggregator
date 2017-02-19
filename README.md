@@ -1,5 +1,5 @@
 # Hacker News Aggregator
-Aggregates the top 30 stories on HackerNews and prints out the top 10 commenters from these stories.
+Aggregates the top 30 stories on HackerNews and prints out the top 10 commenters across these stories.
 
 ## Installation
 If you wish to run it on your local machine, please follow the steps below:
