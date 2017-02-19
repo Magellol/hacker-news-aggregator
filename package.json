@@ -2,11 +2,30 @@
   "name": "hacker-news-aggregator",
   "version": "0.0.1",
   "description": "Aggregate the result of the top 30 stories, bundled with their top commenters",
-  "main": "index.js",
+  "main": "./src/index.js",
   "repository": "git@github.com:Magellol/hacker-news-aggregator.git",
   "author": "Thomas Lefebvre <thmslbvr@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "aggregate": "node --harmony ./src/index.js"
+  },
+  "eslintConfig": {
+    "extends": "airbnb-base",
+    "env": {
+      "node": true,
+      "es6": true
+    }
+  },
   "engines": {
     "node": "^7.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.15.0",
+    "eslint-config-airbnb-base": "^11.1.0",
+    "eslint-plugin-import": "^2.2.0"
+  },
+  "dependencies": {
+    "cli-table": "^0.3.1",
+    "node-fetch": "^1.6.3"
   }
 }
