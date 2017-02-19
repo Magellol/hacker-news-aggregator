@@ -15,9 +15,9 @@ If you wish to run it on your local machine, please follow the steps below:
 This was an attempt to use the `v0` version of the Hacker News API. As they state on their [github repository](https://github.com/HackerNews/API#design), they've took a dump in-memory of their data structure and put it up on Firebase, which isn't really optimized over the network. Some of the data we want to have require doing _a lot_ of network requests to get them. Without any caching system, this script can sometimes take a little long to complete.
 
 ## Output
-![Terminal Output](https://cl.ly/1X2i3N100F0n)
+![Terminal Output](https://d3uepj124s5rcx.cloudfront.net/items/140g1U1k3j2w0t3B422p/Screen%20Shot%202017-02-19%20at%204.50.56%20PM.png)
 
-![Terminal Output](https://cl.ly/2K0g2a1D3L2L)
+![Terminal Output](https://d3uepj124s5rcx.cloudfront.net/items/263k2u280B1w2r1W2U3c/Screen%20Shot%202017-02-19%20at%204.51.01%20PM.png)
 
 ## Improvements
 
