@@ -1,0 +1,12 @@
+{
+  "name": "hacker-news-aggregator",
+  "version": "0.0.1",
+  "description": "Aggregate the result of the top 30 stories, bundled with their top commenters",
+  "main": "index.js",
+  "repository": "git@github.com:Magellol/hacker-news-aggregator.git",
+  "author": "Thomas Lefebvre <thmslbvr@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": "^7.0.0"
+  }
+}
