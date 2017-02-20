@@ -1,6 +1,11 @@
 /* eslint-disable no-console */
 
-const { TOP_STORIES_ENDPOINT, SINGLE_ITEM_ENDPOINT } = require('./constants');
+const {
+  TOP_STORIES_ENDPOINT,
+  SINGLE_ITEM_ENDPOINT,
+  ERROR_TO_RETRY,
+  MAX_NUMBER_OF_TRIES,
+} = require('./constants');
 
 const {
   fetch,
@@ -107,43 +112,44 @@ function getTopTenCommenters(listOfAllComments) {
     .map(name => [name, topList[name]]);
 }
 
-(async () => {
-  const warningId = setTimeout(() => {
-    console.log(
-      'It\'s slow isn\'t it? Well...part of it is how HackerNews API is designed ' +
-      'we have to do a lot of queries to get what we want. And, also myself to not put a cache system.' // eslint-disable-line comma-dangle
-    );
-  }, 8000);
+(() => {
+  let retry = 0;
 
-  try {
-    const topStories = await getTopStories();
+  async function run() {
+    try {
+      console.log('Getting stories...');
+      const topStories = await getTopStories();
+      const stories = await Promise.all(topStories.map(getItemById));
 
-    console.log('Fetching stories...');
-    const stories = await Promise.all(topStories.map(getItemById));
+      const commentsAsPromised = sortStoriesByHighestScore(stories).map(story => (
+        getCommentsAndTheirKidsFromIds(story.kids)
+      ));
 
-    console.log('Fetching comments for each story...');
-    const commentsAsPromised = sortStoriesByHighestScore(stories).map(story => (
-      getCommentsAndTheirKidsFromIds(story.kids)
-    ));
+      const listOfAllComments = await Promise.all(commentsAsPromised);
 
-    const listOfAllComments = await Promise.all(commentsAsPromised);
+      const topTen = getTopTenCommenters(listOfAllComments);
 
-    clearTimeout(warningId);
-    const topTen = getTopTenCommenters(listOfAllComments);
+      console.log('\n=================================================');
+      console.log('List of the top stories on hacker news right now.');
+      console.log('==================================================');
+      console.log(generateCliTable(['Story title', 'Score'], stories.map(story => [story.title, story.score])));
 
-    console.log('\n=================================================');
-    console.log('List of the top stories on hacker news right now.');
-    console.log('==================================================');
-    console.log(generateCliTable(['Story title', 'Score'], stories.map(story => [story.title, story.score])));
+      console.log('=================================================================================');
+      console.log('List of all top commenters and their total comments across the top stories above.');
+      console.log('=================================================================================');
+      console.log(generateCliTable(['User name', 'Total comments'], topTen));
+    } catch (error) {
+      if (error.name === ERROR_TO_RETRY && retry < MAX_NUMBER_OF_TRIES) {
+        retry += 1;
 
-    console.log('=================================================================================');
-    console.log('List of all top commenters and their total comments across the top stories above.');
-    console.log('=================================================================================');
-    console.log(generateCliTable(['User name', 'Total comments'], topTen));
-  } catch (error) {
-    console.error('Looks like something went wrong while aggregating the data. Maybe a human will be able to do something about it.');
-    console.error(error);
+        console.log(`Hmm. Looks like the API didn't want us to get results back. We're gonna retry in one second. (${retry} out of ${MAX_NUMBER_OF_TRIES}).`);
+        return setTimeout(run, 1500);
+      }
 
-    // TODO do a re-try behaviour, it happens that HN sends a really bad response...
+      console.error('Looks like something went wrong while aggregating the data. Maybe a human will be able to do something about it.');
+      console.error(error);
+    }
   }
+
+  run();
 })();

@@ -23,7 +23,7 @@ This was an attempt to use the `v0` version of the Hacker News API. As they stat
 
 - Caching
 - Use their [Algolia API](https://hn.algolia.com/api) instead of Firebase (They seem to have proper REST endpoints there).
-- Re-try behaviour for network requests. Firebase can sometime give a weird response.
+- ~~Re-try behaviour for network requests. Firebase can sometime give a weird response.~~ Done.
 
 ## License
 MIT
