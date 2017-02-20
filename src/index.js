@@ -147,6 +147,7 @@ function getTopTenCommenters(listOfAllComments) {
       }
 
       console.error('Looks like something went wrong while aggregating the data. Maybe a human will be able to do something about it.');
+      console.error('Also, sometimes the Hacker news API is really slow and/or close the connection for random reasons.');
       console.error(error);
     }
   }
